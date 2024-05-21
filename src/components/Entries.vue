@@ -38,7 +38,7 @@
       <MDBCard text="center">
         <MDBCardBody>
           <i class="fas fa-calendar-days fa-5x" style="padding: 2rem" />
-          <MDBBtn tag="a" href="#stu/query" color="dark">查询课表</MDBBtn>
+          <MDBBtn tag="a" href="#stu/query" color="primary">查询课表</MDBBtn>
         </MDBCardBody>
       </MDBCard>
     </MDBCol>
