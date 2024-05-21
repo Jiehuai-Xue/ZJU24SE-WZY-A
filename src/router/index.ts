@@ -16,6 +16,10 @@ const routes = [
     component: () => import("../views/Stu-CourseSelection.vue"),
   },
   {
+    path: "/stu/query",
+    component: () => import("../views/Stu-TimeTable.vue"),
+  },
+  {
     path: "/admin/settime",
     component: () => import("../views/Admin-SetTime.vue"),
   },
