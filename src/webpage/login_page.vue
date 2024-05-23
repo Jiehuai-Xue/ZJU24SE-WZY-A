@@ -1,16 +1,17 @@
 <!--template:html,style:CSS,script:javascript*/-->
 <script>
 //export这玩意不能出现在script setup里面
-  import { ref } from "vue";
-  import { useRouter,useRoute } from "vue-router";
+  import { ref,onMounted } from "vue";
+  import { useRouter } from "vue-router";
+  // import router from "@/router/router";
 
 export default {
     data() {
       return {
-        title: "2024SE论坛登录",
+        title: "2024 SE论坛登录",
         login: "登录",
-        emptyAccount: "大哥，输账号啊",
-        emptyPassword: "兄啊，你要免密登录吗",
+        emptyAccount: "账号不可为空",
+        emptyPassword: "密码不可为空",
       }
     },
     methods: {
@@ -35,7 +36,7 @@ export default {
           password_empty.value = input_password.value.length === 0;
           setTimeout(enable_button, 2000);
           if (!account_empty.value && !password_empty.value) {
-            setTimeout(jump_to_homepage, 2000);
+            setTimeout(jump_to_homepage,2000);
           }
         }
       };
@@ -52,7 +53,7 @@ export default {
       const jump_to_homepage = () => {
         //编程式跳转
         //setup中无法使用this.$router.因为this无法访问.
-        router.push('/home_page');
+        router.push({ name: 'HomePage'});
       };
 
       return {
@@ -70,22 +71,22 @@ export default {
 </script>
 
 <template>
-  <body>
+  <body style="justify-content: flex-end;">
   <h1 class="title">{{title}}</h1>
   <div class="container">
     <div class="group">
-      <img src="../assets/ZJU_badge.jpg" alt="" class="image" >
+      <img src="../assets/ZJU_badge.png" alt="png" class="image">
       <div style="text-align: center;vertical-align: center;top:5px;position: relative">
         <VaInput
             v-model="input_account"
-            label="请输入账号"
+            label="账号"
             placeholder="Enter your account id"
             immediate-validation
             v-if="account_empty === false"
         />
         <VaInput
             v-model="input_account"
-            label="请输入账号"
+            label="账号"
             placeholder="Error with account id"
             immediate-validation
             error
@@ -96,14 +97,14 @@ export default {
       <div style="text-align: center;vertical-align: center;top:10px;position: relative">
         <VaInput
             v-model="input_password"
-            label="请输入密码"
+            label="密码"
             immediate-validation
             placeholder="Enter your password"
             v-if="password_empty === false"
         />
         <VaInput
             v-model="input_password"
-            label="请输入密码"
+            label="密码"
             placeholder="Error with password"
             immediate-validation
             error
@@ -115,7 +116,8 @@ export default {
         <v-container class="text-center">
           <v-row justify="center" style="width:100px;height:50px;position: relative;
               margin-left: auto;margin-right: auto;top: 10px">
-              <v-btn rounded="xl" size="x-large" block style="position: relative;top:10px"
+              <v-btn rounded="xl" size="x-large" block
+                     style="position: relative;top:10px;min-width: 200px;background: green;color: white;height: 50px;"
                      @click="login_handle();info_check();" :disabled="button_disabled">
                 <p v-if="click === false">{{ login }}</p>
                 <v-progress-circular
@@ -134,7 +136,7 @@ export default {
 
 <style scoped>
   body{
-    background: url(../assets/ZJU_ZJG.jpg) no-repeat center;
+    background: white;
     background-size: cover;
     position: relative;
     right: 0;
@@ -146,7 +148,7 @@ export default {
   }
   .title {
     position: relative;
-    top: 50px;
+    top: 40px;
     text-align: center;
     font-size: 50px;
     font-family: "Microsoft YaHei UI", monospace;
@@ -156,14 +158,14 @@ export default {
     position: relative;
     display: flex;
     justify-items: center;
-    width: 400px;
+    width: 30%;
     height: 400px;
     margin-top: 60px;
     margin-left: auto;
     margin-right: auto;
 
     background: white;
-    border-radius: 50px;
+    border-radius: 30px;
     border: solid black;
   }
   .group {
@@ -183,14 +185,7 @@ export default {
     font-family: "Microsoft YaHei UI",monospace;
   }
   .input_blank {
-    position: relative;
-    text-align: center;
-    height: 25px;
-    width: 180px;
-    margin-top: 10px;
-    border-radius: 15px;
-    font-style: normal;
-    border: solid black;
+    background: white;
   }
   .Login_button {
     border: black;
@@ -230,9 +225,5 @@ export default {
     display: block;
     margin-left: auto;
     margin-right: auto;
-  }
-
-  .v-progress-circular {
-    margin: 1rem;
   }
 </style>

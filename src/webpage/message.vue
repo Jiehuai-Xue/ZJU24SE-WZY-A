@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
 import { useBreakpoint } from 'vuestic-ui'
-import "@/components/message.vue";
-
+import { useRouter } from "vue-router";
 const breakpoints = useBreakpoint()
 
 const isSidebarVisible = ref(breakpoints.mdUp)
@@ -13,9 +12,18 @@ const page = ref(1)
 watchEffect(() => {
   isSidebarVisible.value = breakpoints.smUp
 })
+
+const router = useRouter();
+const homepage_jump = () => {
+  setTimeout(() => { router.push({ name: 'HomePage' }) },500);
+};
+const post_jump = () => {
+  setTimeout(() => { router.push({ name: 'Post' }) }, 500);
+};
 </script>
 
 <script lang="ts">
+
 export default {
   data() {
     return {
@@ -52,8 +60,8 @@ export default {
   },
   methods: {
     omission(value: string) {
-      if(!value) return '';
-      else if (value.length > 10){
+      if (!value) return '';
+      else if (value.length > 10) {
         return value.slice(0, 10) + '...';
       } else {
         return value;
@@ -64,9 +72,9 @@ export default {
       let text = this.inputValue;
       //用innerhtml加载图片时,编译发生在根目录。注意图片路径应当以根目录为起点。
       let path = "src/assets/default_avatar_boy.png";
-      if(!text){
+      if (!text) {
         alert('请输入内容');
-        return ;
+        return;
       }
       let item = document.createElement('div');
       item.className = 'item item-right';
@@ -82,7 +90,7 @@ export default {
       let height = document.querySelector('.content').scrollHeight;
       document.querySelector(".content").scrollTop = height;
     },
-  }
+  },
 };
 </script>
 
@@ -100,7 +108,23 @@ export default {
               :icon="minimized ? 'menu_open' : 'menu'"
               @click="minimized = !minimized"
               class="mt-2"
+              style="color: black"
           />
+          <VaButton
+              preset="secondary"
+              class="homepage_bar"
+              style="border-radius: 10px;"
+              @click="homepage_jump();"
+          >
+            <img src="../assets/homepage.svg" alt="homepage" width="20" height="20"/>
+          </VaButton>
+          <VaButton
+              preset="secondary"
+              style="border-radius: 10px;"
+              @click="post_jump();"
+          >
+            <img src="../assets/post.svg" alt="post" width="20" height="20"/>
+          </VaButton>
         </template>
       </VaNavbar>
     </template>
@@ -119,7 +143,7 @@ export default {
             style="width: 300px;overflow-x: hidden"
             :active="page === index + 1"
             @click="page = index + 1"
-            active-color="info"
+            active-color="messageColor"
           >
             <div style="display: flex">
               <!--左边消息栏-->
@@ -135,7 +159,7 @@ export default {
                   {{ contact.name }}
                 </VaListItemLabel>
 
-                <VaListItemLabel caption>
+                <VaListItemLabel caption style="color: rgba(0,0,0,0.36)">
                   {{ omission(contact.address) }}
                 </VaListItemLabel>
               </VaListItemSection>
@@ -242,7 +266,7 @@ export default {
                   id="text_input"
               >
               </v-textarea>
-              <VaButton class="mr-3 mb-2 button-area" color="secondary"
+              <VaButton class="mr-3 mb-2 button-area" color="myCoolColor"
                 @click="send()">
                 发送
               </VaButton>

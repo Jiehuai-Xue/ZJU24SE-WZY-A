@@ -1,5 +1,6 @@
 <script>
   import { ref } from "vue";
+  import { useRouter } from "vue-router";
 
   export default {
     data() {
@@ -16,6 +17,30 @@
           return value;
         }
       },
+    },
+    setup() {
+      const router = useRouter();
+      const message_jump = () => {
+        setTimeout(() => { router.push({ name: 'message' }) },500);
+      };
+      const homepage_jump = () => {
+        setTimeout(() => { router.push({ name: 'HomePage' }) },500);
+      };
+      const searchpage_jump = () => {
+
+      };
+      const config_jump = () => {
+
+      };
+      const post_jump = () => {
+        setTimeout(() => { router.push({ name: 'Post' }) }, 500);
+      };
+
+      return {
+        message_jump,
+        homepage_jump,
+        post_jump,
+      }
     }
   }
 </script>
@@ -23,21 +48,36 @@
 <template>
   <body>
     <div class="top_bar">
-
-      <button class="homepage_bar" @click="">
-        <img src="../assets/homepage.svg" alt="SVG Image" width="30" height="30">
-        <p>&nbsp;首页</p>
-      </button>
-      <v-btn rounded="xl" size="x-large" class="search_bar">
+      <VaButton
+          preset="secondary"
+          class="mr-6 mb-2 homepage_bar"
+          style="border-radius: 10px;"
+          @click="homepage_jump();"
+      >
+        <img src="../assets/homepage2.svg" alt="homepage" width="30" height="30"/>
+        <p style="color: black;font-family: 'Microsoft YaHei UI';">
+          &nbsp;&nbsp;首页
+        </p>
+      </VaButton>
+      <v-btn rounded="xl" class="search_bar" @click="">
         <img src="../assets/search.svg" alt="SVG Image" width="20" height="20">
-        <p style="font-size: medium">&nbsp;&nbsp;搜索</p>
+        <p style="position: relative;font-size: medium;height: 30px;margin-top: 8%;">
+          &nbsp;&nbsp;搜索帖文
+        </p>
       </v-btn>
-      <v-btn class="text-none msg_bar">
-        <img src="../assets/default_avatar_boy.png" alt="png" width="30" height="30">
+      <v-btn class="text-none post_bar" @click="post_jump();">
+        <img src="../assets/post.svg" alt="svg" width="25" height="25">
+        <p>&nbsp;发布</p>
+      </v-btn>
+      <v-btn class="text-none msg_bar" @click="message_jump();">
+        <img src="../assets/message.svg" alt="svg" width="30" height="30">
         <p>&nbsp;私信</p>
         <v-badge color="error" content="9+" style="position: relative;right: 5px">
           <v-icon>mdi-store-outline</v-icon>
         </v-badge>
+      </v-btn>
+      <v-btn variant="tonal" class="config_button">
+        <img src="../assets/Settings.svg" alt="svg" width="20" height="20">
       </v-btn>
     </div>
     <div class="notice_bar">
@@ -60,7 +100,7 @@
     </div>
     <div class="trend_bar">
       <div class="trend_top_bar">
-        <img src="../assets/trending.png" width="30" height="30" class="trend_img">
+        <img src="../assets/trend.svg" width="30" height="30" class="trend_img">
         <p>&nbsp;&nbsp;&nbsp;&nbsp;热搜</p>
       </div>
       <div class="trend_main_bar">
@@ -99,6 +139,9 @@
 </template>
 
 <style scoped>
+  body {
+    flex-shrink: 0;
+  }
   .top_bar {
     display: flex;
     right: 0;
@@ -106,6 +149,7 @@
     height: 50px;
     overflow: hidden;
     background: #93e1f4;
+    justify-content: flex-end;
   }
   .homepage_bar{
     width: 8%;
@@ -117,6 +161,7 @@
     margin-top: auto;
     margin-bottom: auto;
     margin-left: 30px;
+    min-width: 100px;
 
     border-radius: 10px;
     border: black;
@@ -127,39 +172,47 @@
   }
   .search_bar {
     position: relative;
-    width: 10%;
-    height: 70%;
+    width: 20%;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
     margin-top: auto;
     margin-bottom: auto;
-    margin-left: auto;
-    right: -400px;
+    margin-left: 10px;
+    min-width: 150px;
 
-    font-family: "Microsoft YaHei UI";
+    font-family: "Microsoft YaHei UI",serif;
   }
   .search_bar:hover{
     cursor: pointer;
   }
-  .message_bar {
+  .post_bar {
+    position: relative;
+    background: #93e1f4;
+    color: black;
+    min-width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 8%;
     height: 70%;
-    background: #93e1f4;
+    margin-top: auto;
+    margin-bottom: auto;
+    margin-left: 10px;
+
+    font-family: "Microsoft YaHei UI",serif;
+  }
+  .config_button {
+    position: relative;
+    width: 2%;
+    min-width: 40px;
+    height: 70%;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-top: auto;
     margin-bottom: auto;
-    position: relative;
-    margin-left: auto;
-    right: 10px;
-    border-width: 2px;
-
-    font-family: "Microsoft YaHei UI";
-  }
-  .message_bar:hover{
-    cursor: pointer;
+    right: 20px;
   }
   .msg_bar {
     position: relative;
@@ -171,8 +224,9 @@
     height: 70%;
     margin-top: auto;
     margin-bottom: auto;
-    right: 10px;
+    right: 30px;
     margin-left: auto;
+    min-width: 100px;
     
     font-family: "Microsoft YaHei UI",serif;
   }
@@ -206,7 +260,6 @@
     height: 360px;
     overflow-y: scroll;
   }
-
   .trend_bar {
     position: relative;
     width: 45%;
@@ -237,7 +290,6 @@
     height: 360px;
     overflow-y: scroll;
   }
-
   .latest_bar {
     position: relative;
     width: 97%;
