@@ -18,7 +18,7 @@ const homepage_jump = () => {
   setTimeout(() => { router.push({ name: 'HomePage' }) },500);
 };
 const post_jump = () => {
-  setTimeout(() => { router.push({ name: 'Post' }) }, 500);
+  setTimeout(() => { router.push({ name: 'Post_edit' }) }, 500);
 };
 </script>
 

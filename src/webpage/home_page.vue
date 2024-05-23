@@ -27,19 +27,21 @@
         setTimeout(() => { router.push({ name: 'HomePage' }) },500);
       };
       const searchpage_jump = () => {
-
+        setTimeout(() => { router.push({ name: 'SearchPage' }) },500);
       };
       const config_jump = () => {
-
+        setTimeout(() => { router.push({ name: 'Setting' }) },500);
       };
       const post_jump = () => {
-        setTimeout(() => { router.push({ name: 'Post' }) }, 500);
+        setTimeout(() => { router.push({ name: 'Post_edit' }) }, 500);
       };
 
       return {
         message_jump,
         homepage_jump,
         post_jump,
+        searchpage_jump,
+        config_jump,
       }
     }
   }
@@ -59,7 +61,7 @@
           &nbsp;&nbsp;首页
         </p>
       </VaButton>
-      <v-btn rounded="xl" class="search_bar" @click="">
+      <v-btn rounded="xl" class="search_bar" @click="searchpage_jump();">
         <img src="../assets/search.svg" alt="SVG Image" width="20" height="20">
         <p style="position: relative;font-size: medium;height: 30px;margin-top: 8%;">
           &nbsp;&nbsp;搜索帖文
@@ -76,7 +78,7 @@
           <v-icon>mdi-store-outline</v-icon>
         </v-badge>
       </v-btn>
-      <v-btn variant="tonal" class="config_button">
+      <v-btn variant="tonal" class="config_button" @click="config_jump();">
         <img src="../assets/Settings.svg" alt="svg" width="20" height="20">
       </v-btn>
     </div>
