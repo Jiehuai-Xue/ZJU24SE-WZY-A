@@ -1,43 +1,56 @@
 <template>
-  <div class="user-settings">
-    <h2>个人设置</h2>
-    <div class="profile">
-      <img :src="user.avatar || defaultAvatar" alt="用户头像" class="avatar">
-      <div class="info">
-        <div class="form-group">
-          <label for="id">用户 ID</label>
-          <input type="text" id="id" v-model="user.id" disabled>
+  <div class="page-container">
+    <v-btn variant="tonal" style="width: 50px;min-width: 50px;background: none;"
+           @click="homepage_jump();" class="back-button">
+      <img src="../assets/back.svg" alt="svg" width="20" height="20">
+    </v-btn>
+    <div class="user-settings">
+      <div class="profile-section">
+        <h2>个人设置</h2>
+        <div class="profile">
+          <img :src="user.avatar || defaultAvatar" alt="用户头像" class="avatar">
+          <div class="info">
+            <div class="form-group">
+              <label for="id">用户 ID</label>
+              <input type="text" id="id" v-model="user.id" disabled>
+            </div>
+            <div class="form-group">
+              <label for="role">身份</label>
+              <input type="text" id="role" v-model="user.role" disabled>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="role">身份</label>
-          <input type="text" id="role" v-model="user.role" disabled>
-        </div>
+
       </div>
+      <div class="edit-section">
+        <form @submit.prevent="validateForm">
+          <h3>修改资料</h3>
+          <div class="form-group" :class="{ 'has-error': errors.name }">
+            <label for="name">名称</label>
+            <input type="text" id="name" v-model="user.name" class="highlight-input">
+            <p v-if="errors.name" class="error-message">{{ errors.name }}</p>
+          </div>
+          <div class="form-group">
+            <label for="avatar">头像</label>
+            <input type="file" id="avatar" @change="onFileChange">
+          </div>
+          <div class="form-group" :class="{ 'has-error': errors.password }">
+            <label for="password">密码</label>
+            <input type="password" id="password" v-model="user.password" class="highlight-input">
+            <p v-if="errors.password" class="error-message">{{ errors.password }}</p>
+          </div>
+          <button type="submit">提交更改</button>
+        </form>
+      </div>
+      <button @click="logout" class="logout">退出登录</button>
+      <button @click="deleteAccount" class="delete-account">注销账号</button>
     </div>
-    <form @submit.prevent="validateForm">
-      <h3>修改资料</h3>
-      <div class="form-group" :class="{ 'has-error': errors.name }">
-        <label for="name">名称</label>
-        <input type="text" id="name" v-model="user.name">
-        <p v-if="errors.name" class="error-message">{{ errors.name }}</p>
-      </div>
-      <div class="form-group">
-        <label for="avatar">头像</label>
-        <input type="file" id="avatar" @change="onFileChange">
-      </div>
-      <div class="form-group" :class="{ 'has-error': errors.password }">
-        <label for="password">密码</label>
-        <input type="password" id="password" v-model="user.password">
-        <p v-if="errors.password" class="error-message">{{ errors.password }}</p>
-      </div>
-      <button type="submit">提交更改</button>
-    </form>
-    <button @click="logout" class="logout">退出登录</button>
-    <button @click="deleteAccount" class="delete-account">注销账号</button>
   </div>
 </template>
 
 <script>
+import { useRouter } from "vue-router";
+
 export default {
   data() {
     return {
@@ -47,7 +60,7 @@ export default {
         avatar: "",
         password: "123456",
         status: "online",
-        role: "student"
+        role: "user"
       },
       defaultAvatar: "./src/assets/avator1.jpg", // 默认头像
       errors: {
@@ -78,6 +91,8 @@ export default {
     updateSettings() {
       alert("设置已更新");
       console.log("Updated user settings:", this.user);
+      this.user.name = "";
+      this.user.password = "";
     },
     logout() {
       alert("已退出登录");
@@ -86,10 +101,21 @@ export default {
       if (confirm("确定要注销账号吗？此操作无法撤销。")) {
         alert("账号已注销");
       }
+    },
+  },
+  setup() {
+    const router = useRouter();
+    const homepage_jump = () => {
+      setTimeout(() => { router.push({ name: 'HomePage' }) }, 500);
+    };
+
+    return {
+      homepage_jump,
     }
-  }
+  },
 };
 </script>
+
 <style scoped>
 body {
   background-color: #e0ffff; /* 浅青色 */
@@ -101,24 +127,41 @@ body {
   min-height: 100vh;
 }
 
+.page-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0; /* 使内容在水平方向左右居中 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 25vh;
+}
+
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+}
+
 .user-settings {
   width: 100%;
-  max-width: 600px;
   margin: 20px;
   padding: 20px;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: column; /* 将方向改为列方向 */
   box-sizing: border-box;
-  margin-left: auto;
-  margin-right: auto;
 }
 
-.user-settings h2 {
+.profile-section, .edit-section {
+  margin-bottom: 20px; /* 底部间距 */
+}
+
+.profile-section h2 {
   text-align: center;
   margin-bottom: 20px;
+  color: #333; /* 更改颜色为黑色 */
 }
 
 .profile {
@@ -200,8 +243,22 @@ button:hover {
   background-color: #c9302c;
 }
 
+.highlight-input {
+  background-color: #f0f0f0; /* Light grey background */
+  border: 1px solid #ccc;
+}
+
+.highlight-input:focus {
+  background-color: #e0e0e0; /* Slightly darker grey on focus */
+  border-color: #007bff; /* Blue border on focus */
+}
+
 /* 响应式设计 */
 @media (max-width: 600px) {
+  .user-settings {
+    flex-direction: column; /* Stack sections vertically on small screens */
+  }
+
   .profile {
     flex-direction: column;
     align-items: center;
@@ -210,6 +267,10 @@ button:hover {
   .info {
     margin-left: 0;
     margin-top: 20px;
+    color: #333;
+    border: 1px solid #333; /* 添加边框 */
+    padding: 5px; /* 添加内边距 */
+    border-radius: 5px; /* 圆角边框 */
   }
 }
 </style>

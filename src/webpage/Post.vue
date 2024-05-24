@@ -1,3 +1,80 @@
+<template>
+  <div class="post-detail-container">
+    <div class="post-detail" v-if="post.id">
+      <v-btn icon to="/previous-page" class="back-button" @click="homepage_jump();">
+        <v-icon color="primary" size="24">mdi-arrow-left</v-icon>
+      </v-btn>
+      <div class="post-header">
+        <img :src="post.authorAvatar || defaultAvatar" alt="作者头像" class="avatar">
+        <div class="post-info">
+          <h2>{{ post.title }}</h2>
+          <button v-if="isPostOwner" @click="deletePost">删除帖子</button>
+        </div>
+      </div>
+      <div class="post-content">
+        <p>{{ post.content }}</p>
+      </div>
+      <div class="post-meta">
+        <p class="author">作者: {{ post.authorName }}</p>
+        <p class="time">发布时间: {{ post.publishedAt }}</p>
+        <p class="views">浏览量: {{ post.viewCount }}</p>
+      </div>
+      <div class="comments">
+        <h3>留言</h3>
+        <div v-for="comment in comments" :key="comment.id" class="comment">
+          <img :src="comment.userAvatar || defaultAvatar" alt="用户头像" class="avatar">
+          <div class="comment-info">
+            <p class="comment-user">{{ comment.userName }}</p>
+            <p class="comment-time">{{ comment.publishedAt }}</p>
+            <p class="comment-content">{{ comment.content }}</p>
+            <button @click="setReplyTo(comment.id)">回复</button>
+            <button v-if="comment.userId === currentUserId" @click="deleteComment(comment.id)">删除</button>
+            <button v-if="!comment.reported" @click="reportComment(comment.id)">举报</button>
+            <span v-else>已举报</span>
+            <div v-if="comment.replies.length > 0" class="replies">
+              <div v-for="reply in comment.replies" :key="reply.id" class="reply">
+                <img :src="reply.userAvatar || defaultAvatar" alt="用户头像" class="avatar">
+                <div class="reply-info">
+                  <p class="reply-user">{{ reply.userName }}</p>
+                  <p class="reply-time">{{ reply.publishedAt }}</p>
+                  <p class="reply-content">{{ reply.content }}</p>
+                  <button v-if="reply.userId === currentUserId" @click="deleteComment(reply.id)">删除</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <form @submit.prevent="addComment">
+          <h3>添加留言</h3>
+          <div class="form-group">
+            <textarea v-model="newComment" placeholder="输入你的留言"></textarea>
+          </div>
+          <button type="submit">提交留言</button>
+        </form>
+        <form v-if="replyToCommentId" @submit.prevent="addReply">
+          <h3>回复评论</h3>
+          <div class="form-group">
+            <textarea v-model="newReply" placeholder="输入你的回复"></textarea>
+          </div>
+          <button type="submit">提交回复</button>
+          <button type="button" @click="cancelReply">取消</button>
+        </form>
+        <div v-if="isAdmin">
+          <h3>待审核的举报评论</h3>
+          <div v-for="comment in reportedComments" :key="comment.id" class="reported-comment">
+            <p>{{ comment.content }}</p>
+            <button @click="reviewComment(comment.id, false)">删除</button>
+            <button @click="reviewComment(comment.id, true)">保留</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <p>帖子已删除或不存在。</p>
+    </div>
+  </div>
+</template>
+
 <script>
 export default {
   data() {
@@ -133,7 +210,10 @@ export default {
       this.comments.forEach(comment => {
         comment.replies = comment.replies.filter(reply => reply.id !== commentId);
       });
-    }
+    },
+    homepage_jump() {
+      setTimeout(() => { this.router.push({ name: 'HomePage' }) }, 500);
+    },
   },
   computed: {
     reportedComments() {
@@ -145,78 +225,7 @@ export default {
   }
 };
 </script>
-2. Template 部分
-Copy<template>
-  <div class="post-detail" v-if="post.id">
-    <div class="post-header">
-      <img :src="post.authorAvatar || defaultAvatar" alt="作者头像" class="avatar">
-      <div class="post-info">
-        <h2>{{ post.title }}</h2>
-        <button v-if="isPostOwner" @click="deletePost">删除帖子</button>
-      </div>
-    </div>
-    <div class="post-content">
-      <p>{{ post.content }}</p>
-    </div>
-    <div class="post-meta">
-      <p class="author">作者: {{ post.authorName }}</p>
-      <p class="time">发布时间: {{ post.publishedAt }}</p>
-      <p class="views">浏览量: {{ post.viewCount }}</p>
-    </div>
-    <div class="comments">
-      <h3>留言</h3>
-      <div v-for="comment in comments" :key="comment.id" class="comment">
-        <img :src="comment.userAvatar || defaultAvatar" alt="用户头像" class="avatar">
-        <div class="comment-info">
-          <p class="comment-user">{{ comment.userName }}</p>
-          <p class="comment-time">{{ comment.publishedAt }}</p>
-          <p class="comment-content">{{ comment.content }}</p>
-          <button @click="setReplyTo(comment.id)">回复</button>
-          <button v-if="comment.userId === currentUserId" @click="deleteComment(comment.id)">删除</button>
-          <button v-if="!comment.reported" @click="reportComment(comment.id)">举报</button>
-          <span v-else>已举报</span>
-          <div v-if="comment.replies.length > 0" class="replies">
-            <div v-for="reply in comment.replies" :key="reply.id" class="reply">
-              <img :src="reply.userAvatar || defaultAvatar" alt="用户头像" class="avatar">
-              <div class="reply-info">
-                <p class="reply-user">{{ reply.userName }}</p>
-                <p class="reply-time">{{ reply.publishedAt }}</p>
-                <p class="reply-content">{{ reply.content }}</p>
-                <button v-if="reply.userId === currentUserId" @click="deleteComment(reply.id)">删除</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <form @submit.prevent="addComment">
-        <h3>添加留言</h3>
-        <div class="form-group">
-          <textarea v-model="newComment" placeholder="输入你的留言"></textarea>
-        </div>
-        <button type="submit">提交留言</button>
-      </form>
-      <form v-if="replyToCommentId" @submit.prevent="addReply">
-        <h3>回复评论</h3>
-        <div class="form-group">
-          <textarea v-model="newReply" placeholder="输入你的回复"></textarea>
-        </div>
-        <button type="submit">提交回复</button>
-        <button type="button" @click="cancelReply">取消</button>
-      </form>
-      <div v-if="isAdmin">
-        <h3>待审核的举报评论</h3>
-        <div v-for="comment in reportedComments" :key="comment.id" class="reported-comment">
-          <p>{{ comment.content }}</p>
-          <button @click="reviewComment(comment.id, false)">删除</button>
-          <button @click="reviewComment(comment.id, true)">保留</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div v-else>
-    <p>帖子已删除或不存在。</p>
-  </div>
-</template>
+
 <style scoped>
 body {
   margin: 0;
@@ -241,6 +250,12 @@ body {
   padding: 2rem;
   background-color: #fff;
   box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+}
+
+.back-button {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
 }
 
 .post-header {
