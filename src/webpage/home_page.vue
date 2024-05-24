@@ -6,17 +6,32 @@
     data() {
       return {
         path: "https://randomuser.me/api/portraits/women/8.jpg",
+        msg_count: 0,
+        timer: 0,
       }
     },
     methods: {
       omission(value) {
-        if(!value) return '';
-        else if (value.length > 10){
+        if (!value) return '';
+        else if (value.length > 10) {
           return value.slice(0, 10) + '...';
         } else {
           return value;
         }
       },
+      polling_msg() {
+        this.timer = setInterval(() => {
+          setTimeout(() => {
+            this.msg_count = (this.msg_count + 1) % 10;
+          }, 0);
+        }, 2000);
+      },
+    },
+    mounted() {
+        this.polling_msg();
+    },
+    destroyed() {
+      window.clearInterval(this.timer);
     },
     setup() {
       const router = useRouter();
@@ -74,7 +89,7 @@
       <v-btn class="text-none msg_bar" @click="message_jump();">
         <img src="../assets/message.svg" alt="svg" width="30" height="30">
         <p>&nbsp;私信</p>
-        <v-badge color="error" content="9+" style="position: relative;right: 5px">
+        <v-badge color="error" :content="this.msg_count" style="position: relative;right: 5px">
           <v-icon>mdi-store-outline</v-icon>
         </v-badge>
       </v-btn>
