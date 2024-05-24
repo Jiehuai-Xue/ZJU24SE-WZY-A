@@ -13,9 +13,9 @@ import { ref } from 'vue';
 import Entries from "../components/Entries.vue";
 
 // const userInfo = getUserInfo();
-// const userId = "student";
+const userId = "student";
 // const userId = 'admin';
-const userId = 'teacher';
+// const userId = 'teacher';
 
 const get_title = function(x:String) {
   if (x=='student'){
