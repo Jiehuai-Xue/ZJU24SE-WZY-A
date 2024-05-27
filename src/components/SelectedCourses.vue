@@ -15,7 +15,8 @@
       </tr>
       </thead>
       <tbody>
-      <tr v-for="(course, index) in selectedCourses" :key="course.details[0].id">
+<!--      <tr v-for="(course, index) in selectedCourses" :key="course.details[0].id">-->
+      <tr v-for="course in this.courses" :key="course.details[0].id">
         <td>{{ index + 1 }}</td>
         <td>是</td>
         <td>{{ course.code }}</td>
@@ -47,8 +48,191 @@ export default {
       required: true
     }
   },
+  data() {
+
+    return {
+      expandedCourse: null,
+      searchQuery: '',
+      searchValue: '',
+      searchType: '',
+      selectedCourses: new Set(),
+      myCourses: [],
+      courses: [
+        {
+          id: 1,
+          code: '(21120251)',
+          name: '线性代数',
+          credits: 4.0,
+          type: '专业课',
+          department: '计算机科学与技术学院',
+          status: '未选',
+          details: [
+            {
+              id: 1,
+              teacher: '王章毅',
+              term: '春夏',
+              times: ['周一第1-2节 (春1-8周；夏1-7周)', '周三第11-12节 (春,夏1,3,5,7周)'],
+              locations: ['玉泉曹光彪东楼西-104', '玉泉曹光彪东-503'],
+              examTime: '2024年06月27日 (10:30-12:30)',
+              teachingMethod: '双语',
+              available: 6,
+              capacity: 84,
+              majorSpecific: 0,
+              totalSpecific: 0,
+              conflict: true
+            },
+            {
+              id: 2,
+              teacher: '李教授',
+              term: '春夏',
+              times: ['周二第1-2节 (春1-8周；夏1-7周)', '周四第11-12节 (春,夏1,3,5,7周)'],
+              locations: ['玉泉曹光彪东楼西-204', '玉泉曹光彪东-303'],
+              examTime: '2024年06月28日 (10:30-12:30)',
+              teachingMethod: '单语',
+              available: 10,
+              capacity: 60,
+              majorSpecific: 2,
+              totalSpecific: 5,
+              conflict: false
+            }
+          ]
+        },
+        {
+          id: 2,
+          code: '(21120241)',
+          name: '操作系统',
+          credits: 5.0,
+          type: '专业课',
+          department: '计算机科学与技术学院',
+          status: '未选',
+          details: [
+            {
+              id: 3,
+              teacher: '刘玉生',
+              term: '春夏',
+              times: ['周一第3-4节 (春1-8周；夏1-7周)', '周三第9-10节 (春,夏1,3,5,7周)'],
+              locations: ['玉泉曹光彪东楼西-101', '玉泉曹光彪东-503'],
+              examTime: '2024年06月27日 (10:30-12:30)',
+              teachingMethod: '双语',
+              available: 3,
+              capacity: 80,
+              majorSpecific: 0,
+              totalSpecific: 0,
+              conflict: true
+            }
+          ]
+        },
+        {
+          id: 3,
+          code: '(21120231)',
+          name: '编译原理',
+          credits: 3.5,
+          type: '专业课',
+          department: '计算机科学与技术学院',
+          status: '未选',
+          details: [
+            {
+              id: 4,
+              teacher: '李教授',
+              term: '春夏',
+              times: ['周二第1-2节 (春1-8周；夏1-7周)', '周四第11-12节 (春,夏1,3,5,7周)'],
+              locations: ['玉泉曹光彪东楼西-204', '玉泉曹光彪东-303'],
+              examTime: '2024年06月28日 (10:30-12:30)',
+              teachingMethod: '单语',
+              available: 10,
+              capacity: 60,
+              majorSpecific: 2,
+              totalSpecific: 5,
+              conflict: false
+            },
+            {
+              id: 5,
+              teacher: '王章毅',
+              term: '春夏',
+              times: ['周一第1-2节 (春1-8周；夏1-7周)', '周三第11-12节 (春,夏1,3,5,7周)'],
+              locations: ['玉泉曹光彪东楼西-104', '玉泉曹光彪东-503'],
+              examTime: '2024年06月27日 (10:30-12:30)',
+              teachingMethod: '双语',
+              available: 6,
+              capacity: 84,
+              majorSpecific: 0,
+              totalSpecific: 0,
+              conflict: true
+            },
+            {
+              id: 6,
+              teacher: '张教授',
+              term: '春夏',
+              times: ['周五第5-6节 (春1-8周；夏1-7周)', '周日第7-8节 (春,夏1,3,5,7周)'],
+              locations: ['玉泉曹光彪东楼西-304', '玉泉曹光彪东-403'],
+              examTime: '2024年07月01日 (10:30-12:30)',
+              teachingMethod: '双语',
+              available: 8,
+              capacity: 70,
+              majorSpecific: 1,
+              totalSpecific: 4,
+              conflict: false
+            }
+          ]
+        },
+        {
+          id: 4,
+          code: '(21120221)',
+          name: '人工智能',
+          credits: 2.5,
+          type: '专业课',
+          department: '计算机科学与技术学院',
+          status: '已选',
+          details: [
+            {
+              id: 7,
+              teacher: '张老师',
+              term: '春夏',
+              times: ['周三第3-4节 (春1-8周；夏1-7周)', '周五第9-10节 (春,夏1,3,5,7周)'],
+              locations: ['玉泉曹光彪东楼西-304', '玉泉曹光彪东-403'],
+              examTime: '2024年06月29日 (10:30-12:30)',
+              teachingMethod: '双语',
+              available: 5,
+              capacity: 70,
+              majorSpecific: 0,
+              totalSpecific: 0,
+              conflict: false
+            }
+          ]
+        },
+        {
+          id: 5,
+          code: '(21120211)',
+          name: '计算理论',
+          credits: 2.0,
+          type: '专业课',
+          department: '计算机科学与技术学院',
+          status: '未选',
+          details: [
+            {
+              id: 8,
+              teacher: '王老师',
+              term: '春夏',
+              times: ['周四第1-2节 (春1-8周；夏1-7周)', '周六第11-12节 (春,夏1,3,5,7周)'],
+              locations: ['玉泉曹光彪东楼西-104', '玉泉曹光彪东-503'],
+              examTime: '2024年06月30日 (10:30-12:30)',
+              teachingMethod: '单语',
+              avacilable: 8,
+              capacity: 90,
+              majorSpecific: 1,
+              totalSpecific: 3,
+              conflict: true
+            }
+          ]
+        }
+      ]
+    };
+  },
   created() {
-    this.selectedCourses = this.selectedCoursesWrapper;
+    // this.selectedCourses = this.selectedCoursesWrapper;
+    // console.log(1111);
+    // this.selectedCourses = this.courses;
+    // console.log(this.selectedCourses);
     console.log("aaa" + JSON.stringify(this.selectedCoursesWrapper));
   },
   methods: {

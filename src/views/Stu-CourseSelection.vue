@@ -1,10 +1,13 @@
 <template>
   <NavBar title="自主选课"/>
   <CourseNavigation @select:selectedNavigation="selectedNavigation" />
-  <CourseDetails @update:courses="updateCourses" :courseType="courseType" :courses="courses"
-                 :expandedCourseWrapper="expandedCourseWrapper" :key='itemKey' />
-  <SelectedCourses v-if="courseType == '选课结果'" @update:selectedCourses="updateSelectedCourses"
-                   :selectedCoursesWrapper="selectedCoursesWrapper" :key='itemKey' />
+  <CourseDetails @update:courses="updateCourses" :courseType="courseType" :courses="courses" />
+  <SelectedCourses @update:selectedCourses="updateSelectedCourses" />
+<!--  <SmartCourseSelection />-->
+<!--  <CourseDetails @update:courses="updateCourses" :courseType="courseType" :courses="courses"-->
+<!--                 :expandedCourseWrapper="expandedCoursesWrapper" :key='itemKey' />-->
+<!--  <SelectedCourses v-if="courseType == '选课结果'" @update:selectedCourses="updateSelectedCourses"-->
+<!--                   :selectedCoursesWrapper="selectedCoursesWrapper" :key='itemKey' />-->
 </template>
 
 
@@ -13,7 +16,6 @@ import NavBar from "../components/NavBar.vue";
 import CourseNavigation from '../components/CourseNavigation.vue';
 import CourseDetails from '../components/CourseDetails.vue';
 import SelectedCourses from '../components/SelectedCourses.vue';
-
 import { getCourse, getCourseBySelect } from '/src/api/courses.js';
 
 export default {

@@ -46,7 +46,17 @@
       <MDBCard text="center">
         <MDBCardBody>
           <i class="fas fa-address-book fa-5x" style="padding: 2rem"/>
-          <MDBBtn tag="a" href="#!" color="dark" >未知</MDBBtn>
+          <!--          <MDBBtn tag="a" href="#stu/byelection" color="dark" >补选申请</MDBBtn>-->
+          <MDBBtn tag="a" href="#stu/byelection" color="primary" >补选申请</MDBBtn>
+        </MDBCardBody>
+      </MDBCard>
+    </MDBCol>
+    <MDBCol>
+      <MDBCard text="center">
+        <MDBCardBody>
+          <i class="fas fa-search-plus fa-5x" style="padding: 2rem"/>
+          <!--          <MDBBtn tag="a" href="#stu/byelection" color="dark" >补选申请</MDBBtn>-->
+          <MDBBtn tag="a" href="#stu/byelection" color="primary" >智能搜索</MDBBtn>
         </MDBCardBody>
       </MDBCard>
     </MDBCol>
