@@ -5,4 +5,4 @@ export { horizontalBarChartData } from './horizontalBarChartData'
 export { lineChartData } from './lineChartData'
 export { pieChartData } from './pieChartData'
 
-// TODO: clean up charts data, after dashboard rework
+// TODO: clean up charts test_data, after dashboard rework

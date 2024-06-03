@@ -23,39 +23,41 @@ const post_jump = () => {
 </script>
 
 <script lang="ts">
+import friend_list from "@/test_data/chat_friend_list";
 
 export default {
   data() {
     return {
       contacts: [
-        {
-          name: "张三",
-          address: "哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈",
-          //require是node里的方法，用于vue动态加载图片
-          // img: "./assets/default_avatar_boy",
-          img: "https://randomuser.me/api/portraits/women/5.jpg",
-        },
-        {
-          name: "Aguirre Klein",
-          address: "626 Carroll Street, Roulette, Ohio, 1477",
-          // img: "./assets/default_avatar_boy",
-          img: "https://randomuser.me/api/portraits/men/1.jpg",
-        },
+        // {
+        //   name: "张三",
+        //   address: "哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈",
+        //   //require是node里的方法，用于vue动态加载图片
+        //   // img: "./assets/default_avatar_boy",
+        //   img: "https://randomuser.me/api/portraits/women/5.jpg",
+        // },
+        // {
+        //   name: "Aguirre Klein",
+        //   address: "626 Carroll Street, Roulette, Ohio, 1477",
+        //   // img: "./assets/default_avatar_boy",
+        //   img: "https://randomuser.me/api/portraits/men/1.jpg",
+        // },
         {
           name: "Tucker Kaufman",
           address: "887 Winthrop Street, Tryon, Florida, 3912",
           // img: "./assets/default_avatar_boy",
           img: "https://randomuser.me/api/portraits/men/3.jpg",
         },
-        {
-          name: "Herbert Keller",
-          address: "286 NW. Shore St.Longwood, FL 32779",
-          // img: "./assets/default_avatar_boy",
-          img: "https://randomuser.me/api/portraits/men/5.jpg",
-        },
+        // {
+        //   name: "Herbert Keller",
+        //   address: "286 NW. Shore St.Longwood, FL 32779",
+        //   // img: "./assets/default_avatar_boy",
+        //   img: "https://randomuser.me/api/portraits/men/5.jpg",
+        // },
       ],
       rules: [v => v.length <= 25 || '最多25字符'],
       inputValue: '',
+      friend_list,
     };
   },
   methods: {
@@ -137,30 +139,30 @@ export default {
                    style="overflow: hidden"
           >
           <VaSidebarItem
-            v-for="(contact, index) in contacts"
-            :key="index"
+            v-for="friend in friend_list"
+            :key="friend.index"
             class="list__item "
             style="width: 300px;overflow-x: hidden"
-            :active="page === index + 1"
-            @click="page = index + 1"
+            :active="page === friend.index + 1"
+            @click="page = friend.index + 1"
             active-color="messageColor"
           >
             <div style="display: flex">
               <!--左边消息栏-->
               <VaListItemSection avatar>
                 <VaAvatar style="position: relative;left:5px;top:50%">
-                <img :src="contact.img" :alt="contact.name">
+                <img :src="friend.img_path" :alt="friend.name">
                 </VaAvatar>
               </VaListItemSection>
 
               <!--账号名称与最新一条聊天信息-->
               <VaListItemSection style="position: relative;left:20px;top:20px">
                 <VaListItemLabel style="font-size: 20px">
-                  {{ contact.name }}
+                  {{ friend.name }}
                 </VaListItemLabel>
 
                 <VaListItemLabel caption style="color: rgba(0,0,0,0.36)">
-                  {{ omission(contact.address) }}
+                  {{ omission(friend.address) }}
                 </VaListItemLabel>
               </VaListItemSection>
             </div>
@@ -177,36 +179,12 @@ export default {
     </template>
 
     <template #content>
-      <main
-          v-if="page === 1"
-          class="p-4"
-      >
-        <h3 class="va-h3">
-          Page 1
-        </h3>
-        <p>Page content must be wrapped in main tag. You must do it manually. Here you can place any blocks you need in your application.</p>
-
-        <p>For example, you can place here your router view, add sidebar with navigation in #left slot.</p>
-        <p>If you're using VaSidebar for page navigation don't forget to wrap it in nav tag.</p>
-      </main>
-      <main
-          v-else-if="page === 2"
-          class="p-4"
-      >
-        <h3 class="va-h3">
-          Page 2
-        </h3>
-        <p>Page content must be wrapped in main tag. You must do it manually. Here you can place any blocks you need in your application.</p>
-
-        <p>For example, you can place here your router view, add sidebar with navigation in #left slot.</p>
-        <p>If you're using VaSidebar for page navigation don't forget to wrap it in nav tag.</p>
-      </main>
-      <main v-else-if="page === 3">
+      <main v-if="page === 1">
         <div class="container" style="position: relative;margin-left: auto; margin-right: auto;">
           <div class="content">
             <div class="item item-center"><span>昨天 12:35</span></div>
             <div class="item item-center">
-              <span>你已添加了凡繁烦，现在可以开始聊天了。</span>
+              <span>你已添加了{{friend_list[0].name}}，现在可以开始聊天了。</span>
             </div>
             <div class="item item-left">
               <div class="avatar">
@@ -264,10 +242,66 @@ export default {
                   label="请输入你的信息"
                   counter
                   id="text_input"
+                  @keyup.enter="send()"
               >
               </v-textarea>
               <VaButton class="mr-3 mb-2 button-area" color="myCoolColor"
                 @click="send()">
+                发送
+              </VaButton>
+            </v-container>
+          </div>
+        </div>
+      </main>
+      <main v-else>
+        <div class="container" style="position: relative;margin-left: auto; margin-right: auto;">
+          <div class="content">
+            <div class="item item-center"><span>昨天 12:35</span></div>
+            <div class="item item-center">
+              <span>你已添加了{{friend_list[1].name}}，现在可以开始聊天了。</span>
+            </div>
+
+            <div class="item item-right">
+              <div class="bubble bubble-right">
+                hello<br/>你好呀
+              </div>
+              <div class="avatar">
+                <img src="../assets/default_avatar_boy.png" alt="png"/>
+              </div>
+            </div>
+            <div class="item item-center"><span>昨天 13:15</span></div>
+            <div class="item item-right">
+              <div class="bubble bubble-right">刚刚不在，不好意思</div>
+              <div class="avatar">
+                <img src="../assets/default_avatar_boy.png" alt="png"/>
+              </div>
+            </div>
+            <div class="item item-left">
+              <div class="avatar">
+                <img src="../assets/default_avatar_boy.png" alt="png"/>
+              </div>
+              <div class="bubble bubble-left">为什么那么久不回信息！<br/>
+              在忙什么！</div></div>
+            <div class="item item-right">
+              <div class="bubble bubble-right">我就不回你<br/>略略略</div>
+              <div class="avatar">
+                <img src="../assets/default_avatar_boy.png" alt="png"/>
+              </div>
+            </div>
+          </div>
+          <div class="input-area">
+            <v-container fluid>
+              <v-textarea
+                  v-model="inputValue"
+                  :rules="rules"
+                  label="请输入你的信息"
+                  counter
+                  id="text_input"
+                  @keyup.enter="send()"
+              >
+              </v-textarea>
+              <VaButton class="mr-3 mb-2 button-area" color="myCoolColor"
+                        @click="send()">
                 发送
               </VaButton>
             </v-container>

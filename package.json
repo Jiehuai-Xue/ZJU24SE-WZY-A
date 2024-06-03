@@ -3,14 +3,19 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "axios": "^1.6.5",
+    "ajax": "^0.0.4",
+    "axios": "^1.7.2",
     "element-plus": "^2.7.3",
+    "eventbus": "^0.0.3",
+    "fs": "^0.0.1-security",
+    "jquery": "^3.7.1",
     "vue": "^3.3.4",
+    "vue-resource": "^1.5.3",
     "vue-router": "^4.3.2",
     "vuestic-ui": "^1.9.10",
     "vuetify": "^3.6.5"

@@ -1,3 +1,111 @@
+<script>
+import { ref, computed, onMounted } from 'vue';
+import records from '@/test_data/records';
+import post_list from "@/test_data/post";
+import { clicked_post_id,clicked_type } from "@/test_data/post";
+import { useRouter } from "vue-router";
+import trend_id_list, { in_trend } from "@/test_data/trend";
+
+export default {
+  data() {
+
+  },
+  methods: {
+
+  },
+  setup() {
+    const searchQuery = ref('');
+    const searchHistory = ref([]);
+
+    // 加载历史记录
+    onMounted(() => {
+      const storedHistory = localStorage.getItem('searchHistory');
+      if (storedHistory) {
+        searchHistory.value = JSON.parse(storedHistory);
+      }
+    });
+
+    // 搜索操作
+    const handleSearch = () => {
+      get_postlist();
+      filteredPosts();
+      const query = searchQuery.value.trim();
+      if (query && !searchHistory.value.includes(query)) {
+        searchHistory.value.push(query);
+        localStorage.setItem('searchHistory', JSON.stringify(searchHistory.value));
+      }
+    };
+
+    // 设置搜索框
+    const setSearchQuery = (item) => {
+      searchQuery.value = item;
+      handleSearch();
+    };
+
+    // 清空历史记录
+    const clearHistory = () => {
+      searchHistory.value = [];
+      localStorage.removeItem('searchHistory');
+    };
+
+    const router = useRouter();
+    const homepage_jump = () => {
+      setTimeout(() => { router.push({ name: 'HomePage' }) }, 500);
+    };
+    const post_jump = (post) => {
+      clicked_post_id.value = post.post.id;
+      clicked_type.value = post.post.type;
+      query_trend(post.post.id);
+      setTimeout(() => { router.push({ name: 'Post' })},500);
+    };
+
+    const searchPost = ref([]);
+    //将记录中对应的帖文全部导入
+    const get_postlist = () => {
+      for(let j = 0; j < post_list.value.length; j++) {
+          searchPost.value.push(post_list.value[j]);
+      }
+    };
+
+    const filterResult = ref([]);
+    // 过滤后的帖子列表
+    const filteredPosts = () => {
+      const query = searchQuery.value.toLowerCase();
+      for(let i = 0; i < searchPost.value.length; i++) {
+        let condition = (searchPost.value[i].post.title.includes(query) ||
+            searchPost.value[i].post.content.includes(query)) &&
+            query.length !== 0;
+        if(condition && !is_in_filterResult(filterResult,searchPost.value[i].post.id))
+          filterResult.value.push(searchPost.value[i]);
+      }
+    };
+    const is_in_filterResult = (filterResult,post_id) => {
+      for(let i = 0; i < filterResult.value.length;i++){
+        if(filterResult.value[i].post.id === post_id) return true;
+      }
+      return false;
+    };
+
+    const query_trend = (post_id) => {
+      in_trend.value = trend_id_list.value.includes(post_id);
+    }
+
+    return {
+      searchQuery,
+      filterResult,
+      searchHistory,
+      handleSearch,
+      setSearchQuery,
+      clearHistory,
+      homepage_jump,
+      post_jump,
+      searchPost,
+      query_trend,
+    };
+  },
+};
+</script>
+
 <template>
   <div class="page-container">
     <v-btn variant="tonal" style="width: 50px;min-width: 50px;background: none;"
@@ -42,84 +150,14 @@
 
       <!-- 过滤后的帖子列表 -->
       <ul>
-        <li v-for="post in filteredPosts" :key="post.id">
-          <h3>{{ post.title }}</h3>
-          <p>{{ post.content }}</p>
+        <li v-for="post in filterResult" :key="post" @click="post_jump(post);">
+          <h3>{{ post.post.title }}</h3>
+          <p>{{ post.post.content }}</p>
         </li>
       </ul>
     </div>
   </div>
 </template>
-
-<script>
-import { ref, computed, onMounted } from 'vue';
-import { posts } from '@/posts';
-import { useRouter } from "vue-router";
-
-export default {
-  methods:{
-
-  },
-  setup() {
-    const searchQuery = ref('');
-    const searchHistory = ref([]);
-
-    // 过滤后的帖子列表
-    const filteredPosts = computed(() => {
-      const query = searchQuery.value.toLowerCase();
-      return posts.filter(
-          (post) =>
-              post.title.toLowerCase().includes(query) ||
-              post.content.toLowerCase().includes(query)
-      );
-    });
-
-    // 加载历史记录
-    onMounted(() => {
-      const storedHistory = localStorage.getItem('searchHistory');
-      if (storedHistory) {
-        searchHistory.value = JSON.parse(storedHistory);
-      }
-    });
-
-    // 搜索操作
-    const handleSearch = () => {
-      const query = searchQuery.value.trim();
-      if (query && !searchHistory.value.includes(query)) {
-        searchHistory.value.push(query);
-        localStorage.setItem('searchHistory', JSON.stringify(searchHistory.value));
-      }
-    };
-
-    // 设置搜索框
-    const setSearchQuery = (item) => {
-      searchQuery.value = item;
-      handleSearch();
-    };
-
-    // 清空历史记录
-    const clearHistory = () => {
-      searchHistory.value = [];
-      localStorage.removeItem('searchHistory');
-    };
-
-    const router = useRouter();
-    const homepage_jump = () => {
-      setTimeout(() => { router.push({ name: 'HomePage' }) }, 500);
-    };
-
-    return {
-      searchQuery,
-      filteredPosts,
-      searchHistory,
-      handleSearch,
-      setSearchQuery,
-      clearHistory,
-      homepage_jump,
-    };
-  },
-};
-</script>
 
 <style scoped>
 .search-posts {

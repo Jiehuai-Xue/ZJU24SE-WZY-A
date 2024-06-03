@@ -7,6 +7,8 @@ import search from "@/webpage/SearchPosts.vue";
 import setting from "@/webpage/UserSettings.vue";
 import {createRouter, createMemoryHistory, createWebHistory, createWebHashHistory} from "vue-router";
 
+import announcement from "@/test_data/announcement";
+
 const routes = [
     {
         path: '/',

@@ -3,7 +3,9 @@
 //export这玩意不能出现在script setup里面
   import { ref,onMounted } from "vue";
   import { useRouter } from "vue-router";
-  // import router from "@/router/router";
+  import { getUserInfoById } from "@/api/api";
+  import { account_info,login_id } from "@/test_data/account";
+  // import bus from "@/bus/bus";
 
 export default {
     data() {
@@ -12,6 +14,8 @@ export default {
         login: "登录",
         emptyAccount: "账号不可为空",
         emptyPassword: "密码不可为空",
+        accountNotExist: "账号不存在",
+        passwordError: "密码错误",
       }
     },
     methods: {
@@ -28,16 +32,39 @@ export default {
       const input_password = ref('');
       const account_empty = ref(false);
       const password_empty = ref(false);
+      const account_not_exist = ref(false);
+      const password_error = ref(false);
+      const account_privilege = ref('');
       const info_check = () => {
         if (click.value === true) {
           //作信息检查时阻塞按钮
           button_disabled.value = true;
           account_empty.value = input_account.value.length === 0;
           password_empty.value = input_password.value.length === 0;
-          setTimeout(enable_button, 2000);
           if (!account_empty.value && !password_empty.value) {
-            setTimeout(jump_to_homepage,2000);
+            for (let i = 0; i < account_info.value.length; i++) {
+              if (input_account.value === account_info.value[i].account_id) {
+                //账号ID若存在,检查密码
+                password_error.value = input_password.value !== account_info.value[i].password;
+                if (password_error.value === false) {
+                  account_privilege.value = account_info.value[i].privilege;
+                  login_id.value = input_account.value;
+                  setTimeout(jump_to_homepage, 500);
+                  return;
+                }
+              }
+            }
+            if (password_error.value === false) account_not_exist.value = true;
+          }else if(!account_empty.value && password_empty.value){
+            account_not_exist.value = true;
+            for (let i = 0; i < account_info.value.length; i++) {
+              if(input_account.value === account_info.value[i].account_id) {
+                account_not_exist.value = false;
+                break;
+              }
+            }
           }
+          setTimeout(enable_button, 500);
         }
       };
 
@@ -53,18 +80,21 @@ export default {
       const jump_to_homepage = () => {
         //编程式跳转
         //setup中无法使用this.$router.因为this无法访问.
-        router.push({ name: 'HomePage'});
+        router.push({name: 'HomePage'});
       };
 
       return {
         input_account,
         input_password,
+        account_privilege,
         click,
         account_empty,
         password_empty,
         login_handle,
         info_check,
         button_disabled,
+        account_not_exist,
+        password_error,
       }
     },
   };
@@ -80,9 +110,11 @@ export default {
         <VaInput
             v-model="input_account"
             label="账号"
-            placeholder="Enter your account id"
+            placeholder="Error with account id"
             immediate-validation
-            v-if="account_empty === false"
+            error
+            :error-messages="emptyAccount"
+            v-if="account_empty === true"
         />
         <VaInput
             v-model="input_account"
@@ -90,7 +122,14 @@ export default {
             placeholder="Error with account id"
             immediate-validation
             error
-            :error-messages="emptyAccount"
+            :error-messages="accountNotExist"
+            v-else-if="account_not_exist === true && account_empty === false"
+        />
+        <VaInput
+            v-model="input_account"
+            label="账号"
+            placeholder="Enter your account id"
+            immediate-validation
             v-else
         />
       </div>
@@ -98,9 +137,12 @@ export default {
         <VaInput
             v-model="input_password"
             label="密码"
+            placeholder="Error with password"
             immediate-validation
-            placeholder="Enter your password"
-            v-if="password_empty === false"
+            error
+            :error-messages="emptyPassword"
+            v-if="password_empty === true"
+            type="password"
         />
         <VaInput
             v-model="input_password"
@@ -108,8 +150,17 @@ export default {
             placeholder="Error with password"
             immediate-validation
             error
-            :error-messages="emptyPassword"
+            :error-messages="passwordError"
+            v-else-if="password_error === true && password_empty === false"
+            type="password"
+        />
+        <VaInput
+            v-model="input_password"
+            label="密码"
+            immediate-validation
+            placeholder="Enter your password"
             v-else
+            type="password"
         />
       </div>
       <div style="vertical-align: center;">

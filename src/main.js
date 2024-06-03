@@ -14,6 +14,8 @@ const vuetify = createVuetify({
 import { createVuestic } from "vuestic-ui";
 import "vuestic-ui/css";
 
+import axios from 'axios';
+
 import App from '@/App.vue'
 // import Vue from "@vitejs/plugin-vue";
 

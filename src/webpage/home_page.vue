@@ -1,30 +1,45 @@
 <script>
   import { ref } from "vue";
   import { useRouter } from "vue-router";
+  import avatar from "@/assets/default_avatar_boy.png";
+  import announcement_list from "@/test_data/announcement";
+  import { clicked_announcement_id } from "@/test_data/announcement";
+  import post_list from "@/test_data/post";
+  import trend_id_list, { in_trend } from "@/test_data/trend";
+  import latest_list from "@/test_data/latest";
+  import friend_list from "@/test_data/chat_friend_list";
+  import { clicked_post_id,clicked_type } from "@/test_data/post";
+  import { account_info, login_id } from "@/test_data/account";
+  // import bus from '@/bus/bus';
 
   export default {
+    computed: {
+      announcement_list() {
+        return announcement_list
+      },
+      post_list() {
+        return post_list
+      }
+    },
     data() {
       return {
-        path: "https://randomuser.me/api/portraits/women/8.jpg",
+        path: avatar,
         msg_count: 0,
         timer: 0,
+        trend_list: this.getTrendList(trend_id_list.value),
+        latest_list,
+        friend_list,
+        account_id: '',
+        account_privilege: '',
       }
     },
     methods: {
-      omission(value) {
-        if (!value) return '';
-        else if (value.length > 10) {
-          return value.slice(0, 10) + '...';
-        } else {
-          return value;
-        }
-      },
       polling_msg() {
         this.timer = setInterval(() => {
           setTimeout(() => {
-            this.msg_count = (this.msg_count + 1) % 10;
+            this.msg_count = friend_list.length;
           }, 0);
-        }, 2000);
+        }, 0);
       },
     },
     mounted() {
@@ -47,18 +62,59 @@
       const config_jump = () => {
         setTimeout(() => { router.push({ name: 'Setting' }) },500);
       };
-      const post_jump = () => {
+      const postedit_jump = () => {
         setTimeout(() => { router.push({ name: 'Post_edit' }) }, 500);
       };
+      const postpage_jump_post = (n) => {
+        // n.post.viewCount += 1;
+        clicked_post_id.value = n.post.id;
+        clicked_type.value = n.post.type;
+        query_trend(n.post.id);
+        setTimeout(() => { router.push({ name: "Post" })},500);
+      };
+      const postpage_jump_announcement = (n) => {
+        // n.post.viewCount += 1;
+        clicked_announcement_id.value = n.post.id;
+        clicked_type.value = n.post.type;
+        setTimeout(() => { router.push({ name: 'Post' }) },500);
+      };
+
+      const getLoginAccount = (login_id) => {
+        for(let i = 0; i < account_info.value.length; i++) {
+          if(account_info.value[i].account_id === login_id.value) {
+            return account_info.value[i];
+          }
+        }
+        return undefined;
+      };
+      const login_Account = getLoginAccount(login_id);
+
+      const getTrendList = (trend_id_list) => {
+        let trend_list = [];
+        for(let i = 0; i < trend_id_list.length; i++) {
+          let trend = post_list.value.find(post => trend_id_list[i] === post.post.id);
+          trend_list.push(trend);
+        }
+        return trend_list;
+      }
+
+      const query_trend = (post_id) => {
+        in_trend.value = trend_id_list.value.includes(post_id);
+      }
 
       return {
         message_jump,
         homepage_jump,
-        post_jump,
+        postedit_jump,
+        postpage_jump_post,
+        postpage_jump_announcement,
         searchpage_jump,
         config_jump,
+        login_Account,
+        getTrendList,
+        query_trend,
       }
-    }
+    },
   }
 </script>
 
@@ -82,7 +138,7 @@
           &nbsp;&nbsp;搜索帖文
         </p>
       </v-btn>
-      <v-btn class="text-none post_bar" @click="post_jump();">
+      <v-btn class="text-none post_bar" @click="postedit_jump();">
         <img src="../assets/post.svg" alt="svg" width="25" height="25">
         <p>&nbsp;发布</p>
       </v-btn>
@@ -105,12 +161,14 @@
       <div class="notice_main_bar">
         <v-list lines="one" style="background: #23c18c;">
           <v-list-item
-              v-for="n in 10"
+              v-for="n in announcement_list.value"
               :key="n"
-              :title="'Item ' + n"
-              :subtitle="omission('Lorem ipsum dolor sit amet consectetur adipisicing elit')"
-              :prepend-avatar="path"
+              :title="n.post.title"
+              :subtitle="'click:'+n.post.viewCount"
+              :prepend-avatar="n.post.authorAvatar"
+              :v-slot:subtitle="n.post.viewCount"
               style="background: #23c18c"
+              @click="postpage_jump_announcement(n);"
           ></v-list-item>
         </v-list>
       </div>
@@ -123,12 +181,13 @@
       <div class="trend_main_bar">
         <v-list lines="one" style="background: #23c18c;">
           <v-list-item
-              v-for="n in 10"
+              v-for="n in trend_list"
               :key="n"
-              :title="'Item ' + n"
-              :subtitle="omission('Lorem ipsum dolor sit amet consectetur adipisicing elit')"
-              :prepend-avatar="path"
+              :title="n.post.title"
+              :subtitle="'click:'+n.post.viewCount"
+              :prepend-avatar="n.post.authorAvatar"
               style="background: #23c18c"
+              @click="postpage_jump_post(n);"
           ></v-list-item>
         </v-list>
       </div>
@@ -141,12 +200,13 @@
       <div class="latest_main_bar">
         <v-list lines="one" style="background: #23c18c;">
           <v-list-item
-              v-for="n in 10"
+              v-for="n in post_list.value"
               :key="n"
-              :title="'Item ' + n"
-              :subtitle="omission('Lorem ipsum dolor sit amet consectetur adipisicing elit')"
-              :prepend-avatar="path"
+              :title="n.post.title"
+              :subtitle="'click:'+n.post.viewCount"
+              :prepend-avatar="n.post.authorAvatar"
               style="background: #23c18c"
+              @click="postpage_jump_post(n);"
           ></v-list-item>
         </v-list>
       </div>

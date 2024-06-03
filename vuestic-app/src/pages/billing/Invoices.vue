@@ -87,7 +87,7 @@ const itemsInView = computed(() => {
 
 const download = () => {
   init({
-    message: "Request received. We'll email your invoice once we've completed data collection.",
+    message: "Request received. We'll email your invoice once we've completed test_data collection.",
     color: 'success',
   })
 }
