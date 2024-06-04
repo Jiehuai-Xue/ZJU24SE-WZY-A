@@ -16,7 +16,7 @@
       </thead>
       <tbody>
 <!--      <tr v-for="(course, index) in selectedCourses" :key="course.details[0].id">-->
-      <tr v-for="course in this.courses" :key="course.details[0].id">
+      <tr v-for="(course, index) in this.courses" :key="course.details[0].id">
         <td>{{ index + 1 }}</td>
         <td>是</td>
         <td>{{ course.code }}</td>
@@ -29,7 +29,8 @@
           <div v-for="location in course.details[0].locations" :key="location">{{ location }}</div>
         </td>
         <td>
-          <button @click="dropCourse(course.details[0].selectId)">退课</button>
+          <button @click="course.details[0]['picked']=!course.details[0]['picked'];dropCourse(course.details[0].selectId)" v-if="course.details[0]['picked']">退课</button>
+          <button @click="course.details[0]['picked']=!course.details[0]['picked'];dropCourse(course.details[0].selectId)" v-if="!course.details[0]['picked']" style="background-color:#007BFF">选课</button>
         </td>
       </tr>
       </tbody>
@@ -79,7 +80,8 @@ export default {
               capacity: 84,
               majorSpecific: 0,
               totalSpecific: 0,
-              conflict: true
+              conflict: true,
+              picked: true
             },
             {
               id: 2,
@@ -93,7 +95,8 @@ export default {
               capacity: 60,
               majorSpecific: 2,
               totalSpecific: 5,
-              conflict: false
+              conflict: false,
+              picked: true
             }
           ]
         },
@@ -118,7 +121,8 @@ export default {
               capacity: 80,
               majorSpecific: 0,
               totalSpecific: 0,
-              conflict: true
+              conflict: true,
+              picked: true
             }
           ]
         },
@@ -143,7 +147,8 @@ export default {
               capacity: 60,
               majorSpecific: 2,
               totalSpecific: 5,
-              conflict: false
+              conflict: false,
+              picked: true
             },
             {
               id: 5,
@@ -157,7 +162,8 @@ export default {
               capacity: 84,
               majorSpecific: 0,
               totalSpecific: 0,
-              conflict: true
+              conflict: true,
+              picked: true
             },
             {
               id: 6,
@@ -171,7 +177,8 @@ export default {
               capacity: 70,
               majorSpecific: 1,
               totalSpecific: 4,
-              conflict: false
+              conflict: false,
+              picked: true
             }
           ]
         },
@@ -196,7 +203,8 @@ export default {
               capacity: 70,
               majorSpecific: 0,
               totalSpecific: 0,
-              conflict: false
+              conflict: false,
+              picked: true
             }
           ]
         },
@@ -221,7 +229,8 @@ export default {
               capacity: 90,
               majorSpecific: 1,
               totalSpecific: 3,
-              conflict: true
+              conflict: true,
+              picked: true
             }
           ]
         }
