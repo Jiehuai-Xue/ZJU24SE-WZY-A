@@ -17,7 +17,11 @@
       <td>必修课程</td>
       <td>无方向</td>
       <td>4.0</td>
-      <td><Switch/></td>
+      <td>
+        <MDBBtn outline="primary" rounded size="sm" @click="c1=!c1" v-if="c1">添加</MDBBtn>
+        <MDBBtn color="danger" rounded size="sm" @click="c1=!c1" v-if="!c1">移除</MDBBtn>
+      </td>
+<!--      <td><Switch/></td>-->
     </tr>
     <tr>
       <th scope="row">软件工程</th>
@@ -26,7 +30,8 @@
       <td>无方向</td>
       <td>2.5</td>
       <td>
-        <MDBBtn outline="primary" rounded size="sm">添加</MDBBtn>
+        <MDBBtn outline="primary" rounded size="sm" @click="c2=!c2" v-if="c2">添加</MDBBtn>
+        <MDBBtn color="danger" rounded size="sm" @click="c2=!c2" v-if="!c2">移除</MDBBtn>
       </td>
     </tr>
     <tr>
@@ -36,7 +41,8 @@
       <td>无方向</td>
       <td>4.5</td>
       <td>
-        <MDBBtn color="danger" rounded size="sm">移除</MDBBtn>
+        <MDBBtn outline="primary" rounded size="sm" @click="c3=!c3" v-if="c3">添加</MDBBtn>
+        <MDBBtn color="danger" rounded size="sm" @click="c3=!c3" v-if="!c3">移除</MDBBtn>
       </td>
     </tr>
     </tbody>
@@ -48,4 +54,9 @@ import {
 } from 'mdb-vue-ui-kit';
 import Switch from "./Switch.vue";
 import Application from "./Application.vue";
+import {ref} from 'vue'
+const c1=ref(true)
+const c2=ref(true)
+const c3=ref(false)
+
 </script>

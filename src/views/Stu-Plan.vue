@@ -8,6 +8,7 @@
 <!--    <Dropdowns />-->
     <Accordion />
   </MDBContainer>
+  <AiBot />
   <!--  <router-view />-->
 </template>
 
@@ -18,6 +19,7 @@ import FlexBox from '../components/FlexBox.vue'
 import ButtonGroup from '../components/ButtonGroup.vue'
 import Dropdowns from '../components/Dropdowns.vue'
 import NavBar from "../components/NavBar.vue";
+import AiBot from "../components/AiBot.vue";
 import { MDBContainer, MDBCol, MDBRow, MDBCardGroup, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText, MDBCardImg, MDBBtn } from "mdb-vue-ui-kit";
 </script>
 

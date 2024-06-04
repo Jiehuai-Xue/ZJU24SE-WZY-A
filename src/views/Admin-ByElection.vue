@@ -5,7 +5,7 @@
     <MDBContainer style="margin-top: 1rem; margin-bottom: 3rem;">
       <MDBBtnGroup aria-label="Basic example">
         <MDBBtn color="primary" @click="setApplication()">申请管理</MDBBtn>
-        <MDBBtn color="primary" @click="setAdd()">手动添加</MDBBtn>
+<!--        <MDBBtn color="primary" @click="setAdd()">手动添加</MDBBtn>-->
       </MDBBtnGroup>
     </MDBContainer>
 

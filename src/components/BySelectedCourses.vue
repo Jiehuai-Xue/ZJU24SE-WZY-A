@@ -16,7 +16,7 @@
       </thead>
       <tbody>
 <!--      <tr v-for="(course, index) in selectedCourses" :key="course.details[0].id">-->
-      <tr v-for="(course, index) in this.courses" :key="course.details[0].id">
+      <tr v-for="course in this.courses" :key="course.details[0].id">
         <td>{{ index + 1 }}</td>
         <td>是</td>
         <td>{{ course.code }}</td>
@@ -29,26 +29,49 @@
           <div v-for="location in course.details[0].locations" :key="location">{{ location }}</div>
         </td>
         <td>
-          <button @click="course.details[0]['picked']=!course.details[0]['picked'];dropCourse(course.details[0].selectId)" v-if="course.details[0]['picked']">退课</button>
-          <button @click="course.details[0]['picked']=!course.details[0]['picked'];dropCourse(course.details[0].selectId)" v-if="!course.details[0]['picked']" style="background-color:#007BFF">选课</button>
+          <button @click="showApplication()">补选</button>
         </td>
       </tr>
       </tbody>
     </table>
   </div>
+  <MDBContainer
+      class="border border-primary"
+      style="
+        height: 60%; width: 60%; padding: 2rem;
+        position: fixed; top: 20%; left: 20%; background-color: white;
+        text-align: center;
+      "
+      v-if="show"
+  >
+    <StuApplication />
+    <MDBBtn color="success" @click="Submit()">提交</MDBBtn>
+    <MDBBtn color="primary" @click="show=!show">关闭</MDBBtn>
+  </MDBContainer>
+  <MDBContainer
+      class="border border-success"
+      style="
+        height: 20%; width: 20%; padding: 2rem;
+        position: fixed; top: 40%; left: 40%; background-color: white;
+        text-align: center;
+      "
+      v-if="showSuc"
+  >
+    申请提交成功，请等候审核！
+    <MDBBtn color="primary" @click="showSuc=false">关闭</MDBBtn>
+  </MDBContainer>
 </template>
 
 <script>
 // import { addCourseSelect, deleteCourseSelect, getCourseByName } from '/src/api/courses.js';
 
+import StuApplication from "./StuApplication.vue";
+import {MDBBtn, MDBContainer} from "mdb-vue-ui-kit";
+
+
 export default {
   name: 'SelectedCourses',
-  props: {
-    selectedCoursesWrapper: {
-      type: Array,
-      required: true
-    }
-  },
+  components: {MDBContainer, MDBBtn, StuApplication},
   data() {
 
     return {
@@ -80,8 +103,7 @@ export default {
               capacity: 84,
               majorSpecific: 0,
               totalSpecific: 0,
-              conflict: true,
-              picked: true
+              conflict: true
             },
             {
               id: 2,
@@ -95,8 +117,7 @@ export default {
               capacity: 60,
               majorSpecific: 2,
               totalSpecific: 5,
-              conflict: false,
-              picked: true
+              conflict: false
             }
           ]
         },
@@ -121,8 +142,7 @@ export default {
               capacity: 80,
               majorSpecific: 0,
               totalSpecific: 0,
-              conflict: true,
-              picked: true
+              conflict: true
             }
           ]
         },
@@ -147,8 +167,7 @@ export default {
               capacity: 60,
               majorSpecific: 2,
               totalSpecific: 5,
-              conflict: false,
-              picked: true
+              conflict: false
             },
             {
               id: 5,
@@ -162,8 +181,7 @@ export default {
               capacity: 84,
               majorSpecific: 0,
               totalSpecific: 0,
-              conflict: true,
-              picked: true
+              conflict: true
             },
             {
               id: 6,
@@ -177,8 +195,7 @@ export default {
               capacity: 70,
               majorSpecific: 1,
               totalSpecific: 4,
-              conflict: false,
-              picked: true
+              conflict: false
             }
           ]
         },
@@ -203,8 +220,7 @@ export default {
               capacity: 70,
               majorSpecific: 0,
               totalSpecific: 0,
-              conflict: false,
-              picked: true
+              conflict: false
             }
           ]
         },
@@ -229,12 +245,13 @@ export default {
               capacity: 90,
               majorSpecific: 1,
               totalSpecific: 3,
-              conflict: true,
-              picked: true
+              conflict: true
             }
           ]
         }
-      ]
+      ],
+      show: false,
+      showSuc: false,
     };
   },
   created() {
@@ -242,18 +259,15 @@ export default {
     // console.log(1111);
     // this.selectedCourses = this.courses;
     // console.log(this.selectedCourses);
-    console.log("aaa" + JSON.stringify(this.selectedCoursesWrapper));
+    // console.log("aaa" + JSON.stringify(this.selectedCoursesWrapper));
   },
   methods: {
-    dropCourse(selectId) {
-      //刪除
-      let deleteData = {}
-      deleteData.idList = [];
-      deleteData.idList.push(selectId);
-      deleteCourseSelect(deleteData).then(response => {
-        this.$emit('update:selectedCourses', selectId);
-        // this.$emit("update:selectedCourses", "remove");
-      }).catch();
+    showApplication() {
+      this.show = true
+    },
+    Submit() {
+      this.show = false
+      this.showSuc = true
     }
   }
 };
@@ -283,7 +297,7 @@ export default {
 
 .selected-courses-table button {
   padding: 5px 10px;
-  background-color: #FF4C4C;
+  background-color: #004fdf;
   color: white;
   border: none;
   cursor: pointer;

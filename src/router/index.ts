@@ -20,6 +20,14 @@ const routes = [
     component: () => import("../views/Stu-TimeTable.vue"),
   },
   {
+    path: "/stu/byelection",
+    component: () => import("../views/Stu-ByElection.vue"),
+  },
+  {
+    path: "/stu/smart",
+    component: () => import("../views/SmartCourseSelection.vue"),
+  },
+  {
     path: "/admin/settime",
     component: () => import("../views/Admin-SetTime.vue"),
   },
