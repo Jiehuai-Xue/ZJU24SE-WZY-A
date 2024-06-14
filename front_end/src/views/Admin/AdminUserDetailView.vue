@@ -2,7 +2,7 @@
     <div class="container">
         <SideBar ref="sidebar"/>
         <div class="content">
-            <AdminUserDetailPage :value_uid="id" :value_oid="id"></AdminUserDetailPage>
+            <AdminUserDetailPage :value_uid="id"></AdminUserDetailPage>
         </div>
     </div>
 </template>  
@@ -29,7 +29,7 @@
         },
         mounted() {
             this.$refs.sidebar.setPermission(2);
-            this.$refs.sidebar.setChoice(4);
+            this.$refs.sidebar.setHighlight(4);
         }
     }
 </script>

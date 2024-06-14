@@ -60,7 +60,7 @@
                 axios.post("/teacher/show_courses", body)
                     .then(response =>{
                         console.log("得到回应", response.data);
-                        if(response.data.code == "1"){
+                        if(response.data.code == "1" || response.data.code == "2"){
                             this.courses = response.data.courses;
                         }else if(response.data.code == "-1"){
                             console.log(response.data.message);

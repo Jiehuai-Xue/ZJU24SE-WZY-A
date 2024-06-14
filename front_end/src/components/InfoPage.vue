@@ -80,7 +80,7 @@
                         type="gallery"
                         file-types="jpg,png"
                         modelValue="info.photo"
-                        fileAdded="handleUpload"
+                        @fileAdded="handleUpload"
                         style="align-self: center; "
                     />
                 </div>
@@ -111,7 +111,8 @@
                 edit: false,
                 uid: this.value_uid,
                 oid: this.value_oid,
-                defaultImageUrl:'http://172.31.171.9:8080/user-profile/default.png',
+                uploadSuccess: false,
+                defaultImageUrl:'http://172.19.115.218:8080/user-profile/default.png',
                 imageStyle: {
                     width: '144px',
                     height: '144px',
@@ -123,10 +124,12 @@
                     name: "",
                     id: null,
                     status:'',
+                    password: '',
+                    gender: '',
+                    age: null,
                     email: "",
                     phone:"",
                     address:"",
-                    photo:[],
                 }
             };
         },
@@ -142,7 +145,7 @@
         },
         methods:{
             url(){
-                return 'http://172.31.171.9:8080/user-profile/' + Math.trunc(this.uid % 100000000).toString() + '.png';
+                return 'http://172.19.115.218:8080/user-profile/' + Math.trunc(this.uid % 100000000).toString() + '.png';
             },
             onImageError(event){
                 event.target.src = this.defaultImageUrl;
@@ -158,11 +161,12 @@
                                 name: response.data.data.name,
                                 id: response.data.data.id,
                                 status: response.data.data.status,
+                                password: response.data.data.password,
+                                age: response.data.data.age,
                                 gender: response.data.data.gender,
                                 email: response.data.data.email,
                                 phone: response.data.data.phone,
                                 address: response.data.data.address,
-                                photo:[],
                             };
                         }else if(response.data.code == "-1"){
                             console.log(response.data.message);
@@ -207,7 +211,7 @@
                 }else{
                     console.log("state changed to show");
                 }
-                const body = {uid: this.uid, oid: this.uid, email: this.info.email};
+                const body = {uid: this.uid, oid: this.uid, user: this.info};
                 console.log(body);
                 axios.post("/modify_info", body)
                     .then(response =>{
@@ -236,35 +240,35 @@
 							console.log(error.config);
 					});                 
             },
-            handleUpload(){
-                console.log("upload photo...");
-                const formData = new FormData();  
-                formData.append('id', this.uid.toString()); // 注意，需要将long转为string  
-                formData.append('photo', this.info.photo);  
-            
-                axios.post('/upload', formData, {  
-                    headers: {  
-                        'Content-Type': 'multipart/form-data'  
-                    }  
-                })  
-                .then(response => {  
-                    // 处理成功响应  
-                    console.log(response);  
-                })  
-                .catch(error => {  
-                    // 处理错误  
-                    console.error(error);  
-                });  
-            }
+            async handleUpload(files) {
+                const file = files[0];
+                const formData = new FormData();
+                formData.append('id', this.uid);
+                formData.append('photo', file);
+                try {
+                    const response = await axios.post('/upload', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                    });
+                    if (response.status === 200) {
+                        console.log('照片上传成功');
+                    } else {
+                        console.error('照片上传失败');
+                    }
+                } catch (error) {
+                    console.error('Error uploading file:', error);
+                }
+             },
         },
         mounted(){
             this.uid = this.value_uid;
             this.oid = this.value_oid;
             this.getInfo();
             console.log('uid = ', this.uid);
-            console.log('http://172.31.171.9:8080/user-profile/' + Math.trunc(this.uid % 100000000).toString() + '.png');
+            console.log('http://172.19.115.218:8080/user-profile/' + Math.trunc(this.uid % 100000000).toString() + '.png');
         }
-    };
+    }
 </script>
 
 <style scoped lang="scss">

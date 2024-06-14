@@ -20,9 +20,7 @@
 		methods: {
 			...mapActions(['updateId']), // 映射action到本组件的方法
 			handleLoginRequest() {
-				console.log('handling a login request...');
-				console.log('用户输入的用户名是:', this.id);
-				console.log('用户输入的密码是:', this.password);
+				console.log('handling a login request with id = ', this.id, ", password = ", this.password);
 				const data = {
 					id: this.id,
 					password: this.password
@@ -75,27 +73,71 @@
 
 <template>
 	<div class="background">
-		<div class="login-box">
-			<h2>登录</h2>
-			<div class="login-field">
-				<input v-model="id" type="number" placeholder="请输入用户名">
+		<div class="login-global">
+			<div class="box">
+				<h2>登录</h2>
+				<div class="login-field">
+					<input v-model="id" type="number" placeholder="请输入用户名">
+				</div>
+				<div class="login-field">
+					<input v-model="password" type="password" placeholder="请输入密码">
+				</div>
+				<div class="message" v-if="if_message">用户名或密码错误，请重试</div>		
+				<button @click="handleLoginRequest()">登录</button>			
 			</div>
-			<div class="login-field">
-				<input v-model="password" type="password" placeholder="请输入密码">
-			</div>
-			<div class="message" v-if="if_message">用户名或密码错误，请重试</div>		
-			<button @click="handleLoginRequest()">登录</button>
+			<div style="display: flex; flex-direction: column;">
+				<div class="title">
+					STSS
+				</div>
+				<div class="sub-title">
+					智慧教学管理系统
+				</div>
+				<div class="slogen">
+					让学习更智能，让管理更高效
+				</div>
+			</div>	
+		</div>
 
-		</div>   
+
+
 	</div>
 </template>
 
 <style>
+.login-global{
+	margin-top: 120px;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+.title{
+	font-weight: 1000;
+	letter-spacing: 20px;
+	padding-left: 40px;
+	padding-top: 100px;
+	padding-bottom: 40px;
+	font-size: 100px;
+	color: #414141;
+}
+.sub-title{
+	font-weight: 1000;
+	letter-spacing: 20px;
+	padding-left: 40px;
+	font-size: 60px;
+	color: #414141;
+	padding-bottom: 40px;
+}
+.slogen{
+	font-weight: 5000;
+	letter-spacing: 15px;
+	padding-left: 40px;
+	font-size: 25px;
+	color: #414141;
+}
 .background {
 	margin: 0;
 	padding: 0;
 	font-family: sans-serif;
-	background: url(@/assets/cover.png)  no-repeat center 0px;
 	background-size: cover;
 	background-position: center 0; 
 	background-repeat: no-repeat;  
@@ -104,59 +146,62 @@
 	-o-background-size: cover;  
 	-moz-background-size: cover;  
 	-ms-background-size: cover;
-}
 
-.login-box{
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%,-50%);
+}
+.box{
 	width: 400px;
 	padding:40px;
-	background: rgba(0,0,0,.8);
-	box-sizing: border-box;
-	box-shadow: 0 15px  25px rgba(0,0,0,.5);
+	padding:40px;
+	background: rgba(255, 255, 255, 0.7);
+	margin-top: 200px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	border-radius: 10px;
+	box-shadow: 0 15px  25px rgba(0,0,0,.5);
+	margin: 100px;
 }
-.login-box h2{
+
+.box h2{
+	letter-spacing: 20px;
 	margin: 0 0 30px;
 	padding: 0;
 	text-align: center;
-	color: #fff;
+	color: #000000;
 }
-.login-box .login-field{
+.box .login-field{
 	position: relative;
 }
-.login-box .login-field  input{
+.box .login-field  input{
 	width: 100%;
 	padding: 10px 0;
 	font-size: 16px;
-	color: #fff;
+	color: #000000;
 	margin-bottom: 30px;
 	border: none;
-	border-bottom: 1px solid #fff;
+	border-bottom: 1px solid #b5b5b5;
 	outline: none;
 	background: transparent;
 }
-.login-box .login-field  label{
+.box .login-field  label{
 	position: absolute;
 	top: 0;
 	left: 0;
 	letter-spacing: 1px;
 	padding: 10px 0;
 	font-size: 16px;
-	color: #fff;
+	color: #000000;
 	pointer-events: none;
 	transition: .5s;
 }
-.login-box .login-field input:focus ~ label,
-.login-box .login-field input:valid ~ label{
+.box .login-field input:focus ~ label,
+.box .login-field input:valid ~ label{
 	top: -23px;
 	left: 0;
 	color: #ffffff;
 	font-size: 12px;
 }
-.login-box button{
+.box button{
 	align-self: center;
 	width: 320px;
 	background: transparent;
@@ -168,7 +213,7 @@
 	cursor: pointer;
 	border-radius: 5px;
 }
-.login-box button:hover{
+.box button:hover{
 	background: transparent;
 	border: none;
 	outline: none;

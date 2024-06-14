@@ -5,7 +5,7 @@
         <div class="profile-box">
             <VaAvatar
                     :src="url()"
-                    fallbackSrc="http://172.31.171.9:8080/user-profile/default.png"
+                    fallbackSrc="http://172.19.115.218:8080/user-profile/default.png"
                     class="mr-6"
                     font-size="30px"
                     size="large"
@@ -13,8 +13,6 @@
             />       
         </div>
              
-
-          
         <VaSidebarItem :active="choice==1" @click="setChoice(1)">
           <VaSidebarItemContent>
             <VaIcon name="home" />
@@ -71,13 +69,33 @@
           </VaSidebarItemContent>
         </VaSidebarItem>
 
+        <VaSidebarItem v-if="permission==4" :active="choice==9" @click="setChoice(9)">
+          <VaSidebarItemContent>
+            <VaIcon name="book" />
+            <VaSidebarItemTitle>选课</VaSidebarItemTitle>
+          </VaSidebarItemContent>
+        </VaSidebarItem>
+
+        <VaSidebarItem v-if="permission==4" :active="choice==10" @click="setChoice(10)">
+          <VaSidebarItemContent>
+            <VaIcon name="book" />
+            <VaSidebarItemTitle>培养方案</VaSidebarItemTitle>
+          </VaSidebarItemContent>
+        </VaSidebarItem>
+
+        <VaSidebarItem v-if="permission==2 || permission==3" :active="choice==12" @click="setChoice(12)">
+          <VaSidebarItemContent>
+            <VaIcon name="book" />
+            <VaSidebarItemTitle>消息</VaSidebarItemTitle>
+          </VaSidebarItemContent>
+        </VaSidebarItem>
+
   
         <VaSpacer />
   
-        <VaSidebarItem :active="choice==9" @click="setChoice(9)">
+        <VaSidebarItem :active="choice==11" @click="setChoice(11)">
           <VaSidebarItemContent>
-            <VaIcon name="settings" />
-            <VaSidebarItemTitle>设置</VaSidebarItemTitle>
+            <VaSidebarItemTitle>进入论坛</VaSidebarItemTitle>
           </VaSidebarItemContent>
         </VaSidebarItem>
       </VaSidebar>
@@ -85,13 +103,9 @@
   </template>
 
 <script>
-import CourseSelectionListPage from '@/components/4/CourseSelectionListPage.vue'
 import { mapState } from 'vuex';
 export default{
     name: 'SideBar',
-    components:{
-      CourseSelectionListPage
-    },
     data() {
       return {
         permission: 0,
@@ -103,7 +117,7 @@ export default{
     },    
     methods: {
       url(){
-        return 'http://172.31.171.9:8080/user-profile/' + (this.id % 100000000).toString() + '.png';
+        return 'http://172.19.115.218:8080/user-profile/' + (this.id % 100000000).toString() + '.png';
       },
       setPermission(x){
         console.log("permission set to ", x);
@@ -154,14 +168,35 @@ export default{
             this.$router.push("/admin/course");
           }
         }else if(this.choice == 6){
-          console.log("push to /admin/classroom");
-            this.$router.push("/admin/classroom");
+          if(this.permission == 2){
+            console.log("push to /admin/classroom");
+            this.$router.push("/admin/classroom");            
+          }else{
+            console.log("push to /sys_admin/classroom");
+            this.$router.push("/sys_admin/classroom");    
+          }
+
         }else if(this.choice == 7){
           console.log("push to /teacher/course");
           this.$router.push("/teacher/course");
         }else if(this.choice == 8){
           console.log("push to /student/course");
           this.$router.push("/student/course");
+        }else if(this.choice == 9){
+
+        }else if(this.choice == 10){
+
+        }else if(this.choice == 11){          
+          console.log("push to /");
+        }else if(this.choice == 12){
+          if(this.permission == 2){
+            console.log("push to /admin/message");
+            this.$router.push("/admin/message");            
+          }else if(this.permission == 3){
+            console.log("push to /teacher/message");
+            this.$router.push("/teacher/message");              
+          }
+
         }
       },
       setHighlight(x){

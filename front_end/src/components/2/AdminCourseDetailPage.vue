@@ -42,7 +42,7 @@
                             </div> 
                             <div class="attribute-long">
                                 <div class="attribute-name" style="margin-bottom: 10px;">评估方法</div>
-                                <div class="attribute-content" v-if="edit==false" style="margin-bottom: 10px;">{{ course.assessmentMethod }}</div>
+                                <div class="attribute-content" v-if="edit==false" style="margin-bottom: 10px;">{{ course.AssessmentMethod }}</div>
                                 <input v-model="course.assessmentMethod" class="attribute-content" v-if="edit" style="margin-bottom: 10px;">
                                 <VaButton v-if="edit==false" @click="edit=true;" style="width: 60px;">编辑</VaButton>
                                 <VaButton v-if="edit" @click="edit=false;" style="width: 100px;">保存修改</VaButton>
@@ -98,7 +98,7 @@
                     capacity:null,
                     size:null,
                     compulsory:false,
-                    assessmentMethod:"",                    
+                    AssessmentMethod:"",                    
                 }
             };
         },

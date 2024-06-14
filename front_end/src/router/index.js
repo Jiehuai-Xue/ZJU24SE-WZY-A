@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
 import SysAdminView from '../views/SysAdmin/SysAdminView.vue'
 import SysAdminInfoView from '../views/SysAdmin/SysAdminInfoView.vue'
+import SysAdminUserView from '../views/SysAdmin/SysAdminUserView.vue'
+import SysAdminCourseView from '../views/SysAdmin/SysAdminCourseView.vue'
+import SysAdminClassroomView from '../views/SysAdmin/SysAdminClassroomView.vue'
 import LogView from '../views/SysAdmin/LogView.vue'
 import AdminView from '../views/Admin/AdminView.vue'
 import AdminInfoView from '../views/Admin/AdminInfoView.vue'
@@ -10,10 +13,12 @@ import AdminUserDetailView from '../views/Admin/AdminUserDetailView.vue'
 import AdminClassroomView from '../views/Admin/AdminClassroomView.vue'
 import AdminCourseView from '../views/Admin/AdminCourseView.vue'
 import AdminCourseDetailView from '../views/Admin/AdminCourseDetailView.vue'
+import AdminMessageView from '../views/Admin/AdminMessageView.vue'
 import TeacherView from '../views/Teacher/TeacherView.vue'
 import TeacherInfoView from '../views/Teacher/TeacherInfoView.vue'
 import TeacherCourseView from '../views/Teacher/TeacherCourseView.vue'
 import TeacherCourseDetailView from '../views/Teacher/TeacherCourseDetailView.vue'
+import TeacherMessageView from '../views/Teacher/TeacherMessageView.vue'
 import StudentView from '../views/Student/StudentView.vue'
 import StudentInfoView from '../views/Student/StudentInfoView.vue'
 import StudentCourseView from '../views/Student/StudentCourseView.vue'
@@ -47,6 +52,21 @@ const router = createRouter({
       component: LogView
     },
     {
+      path:'/sys_admin/user',
+      name: 'sys_admin-user',
+      component: SysAdminUserView,
+    },
+    {
+      path:'/sys_admin/course',
+      name: 'sys_admin-course',
+      component: SysAdminCourseView,
+    },
+    {
+      path:'/sys_admin/classroom',
+      name: 'sys_admin-classroom',
+      component: SysAdminClassroomView,
+    },
+    {
     path:'/admin',
     name:'admin',
     component: AdminView
@@ -61,7 +81,7 @@ const router = createRouter({
     component: AdminUserView
     },
     {
-      path:'/admin/user/detail',
+      path:'/admin/user/detail/:oid',
       name:'admin-user-detail',
       component: AdminUserDetailView
     },
@@ -84,6 +104,11 @@ const router = createRouter({
     component: AdminCourseDetailView
     },
     {
+      path:'/admin/message',
+      name:'admin-message',
+      component: AdminMessageView
+    },
+    {
       path:'/teacher',
       name:'teacher',
       component: TeacherView
@@ -102,6 +127,11 @@ const router = createRouter({
       path: '/teacher/course/detail/:oid',
       name: 'teacher-course-detail',
       component: TeacherCourseDetailView
+    },
+    {
+      path:'/teacher/message',
+      name:'teacher-message',
+      component: TeacherMessageView
     },
     {
       path: '/student',

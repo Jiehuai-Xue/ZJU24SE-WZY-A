@@ -5,15 +5,9 @@
 
             <VaTabs v-model="value" style="margin-bottom: 10px;">
                 <template #tabs>
-                    <VaTab icon="va-minus" label="删除所有" @click="deleteAll"/>
                     <VaTab icon="book" label="筛选与查询" @click="select"/>
                 </template>
             </VaTabs>
-            <div class="tool-detail" v-if="action==2">
-                <div class="delete-item">
-                    <div class="add-item-name">该功能尚未实现 </div>
-                </div>                
-            </div>
             <div class="tool-detail" v-if="action==3">
                 <div class="select-item">
                     <div class="add-item-name">该功能尚未实现 </div>
@@ -33,11 +27,11 @@
                         <tbody>
                             <tr
                             v-for="log in logs"
-                            :key="log.id"
+                            :key="log.uid"
                             >
-                            <td>{{ log.id }}</td>
                             <td>{{ log.time }}</td>
-                            <td>{{ log.content }}</td>
+                            <td>{{ log.uid }}</td>
+                            <td style="text-align: left;">{{ log.content }}</td>
                             </tr>
                         </tbody>
                         </table>
@@ -102,12 +96,6 @@
                     this.action = 0;
                 }
             },
-            comfirmAdd(){
-
-            },
-            uploadPhoto(){
-
-            },
             deleteAll(){
                 if(this.action != 2){
                     this.action = 2;
@@ -130,6 +118,14 @@
 </script>
 
 <style scoped lang="scss">
+	table {
+		width: 100%;
+	}
+	
+	th, td{
+		text-align: center;
+		padding: 5px;
+	}
     .container {
         display: flex;
         flex-direction: column;
