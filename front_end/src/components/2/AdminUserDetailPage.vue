@@ -130,7 +130,7 @@
         data(){
             
             return {
-                defaultImageUrl:'http://172.19.115.218:8080/user-profile/default.png',
+                defaultImageUrl:'http://172.21.209.144:8080/user-profile/default.png',
                 imageStyle: {
                     width: '144px',
                     height: '144px',
@@ -162,7 +162,7 @@
         },
         methods:{
             url(){
-                return 'http://172.19.115.218:8080/user-profile/' + Math.trunc(Number(this.$route.params.oid) % 100000000).toString() + '.png';
+                return 'http://172.21.209.144:8080/user-profile/' + Math.trunc(Number(this.$route.params.oid) % 100000000).toString() + '.png';
             },
             onImageError(event){
                 event.target.src = this.defaultImageUrl;

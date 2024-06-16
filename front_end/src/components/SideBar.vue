@@ -5,7 +5,7 @@
         <div class="profile-box">
             <VaAvatar
                     :src="url()"
-                    fallbackSrc="http://172.19.115.218:8080/user-profile/default.png"
+                    fallbackSrc="http://172.21.209.144:8080/user-profile/default.png"
                     class="mr-6"
                     font-size="30px"
                     size="large"
@@ -117,7 +117,7 @@ export default{
     },    
     methods: {
       url(){
-        return 'http://172.19.115.218:8080/user-profile/' + (this.id % 100000000).toString() + '.png';
+        return 'http://172.21.209.144:8080/user-profile/' + (this.id % 100000000).toString() + '.png';
       },
       setPermission(x){
         console.log("permission set to ", x);

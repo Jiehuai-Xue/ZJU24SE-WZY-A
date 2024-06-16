@@ -122,7 +122,7 @@
 .sub-title{
 	font-weight: 1000;
 	letter-spacing: 20px;
-	padding-left: 40px;
+	padding-left: 30px;
 	font-size: 60px;
 	color: #414141;
 	padding-bottom: 40px;
@@ -130,7 +130,7 @@
 .slogen{
 	font-weight: 5000;
 	letter-spacing: 15px;
-	padding-left: 40px;
+	padding-left: 30px;
 	font-size: 25px;
 	color: #414141;
 }

@@ -112,7 +112,7 @@
                 uid: this.value_uid,
                 oid: this.value_oid,
                 uploadSuccess: false,
-                defaultImageUrl:'http://172.19.115.218:8080/user-profile/default.png',
+                defaultImageUrl:'http://172.21.209.144:8080/user-profile/default.png',
                 imageStyle: {
                     width: '144px',
                     height: '144px',
@@ -145,7 +145,7 @@
         },
         methods:{
             url(){
-                return 'http://172.19.115.218:8080/user-profile/' + Math.trunc(this.uid % 100000000).toString() + '.png';
+                return 'http://172.21.209.144:8080/user-profile/' + Math.trunc(this.uid % 100000000).toString() + '.png';
             },
             onImageError(event){
                 event.target.src = this.defaultImageUrl;
@@ -266,7 +266,7 @@
             this.oid = this.value_oid;
             this.getInfo();
             console.log('uid = ', this.uid);
-            console.log('http://172.19.115.218:8080/user-profile/' + Math.trunc(this.uid % 100000000).toString() + '.png');
+            console.log('http://172.21.209.144:8080/user-profile/' + Math.trunc(this.uid % 100000000).toString() + '.png');
         }
     }
 </script>
